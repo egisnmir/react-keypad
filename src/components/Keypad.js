@@ -7,6 +7,7 @@ function Keypad() {
   const [blockedKeypad, setBlockedKeypad] = useState(false);
   const buttons = [7, 8, 9, 4, 5, 6, 1, 2, 3, 0];
   const [success, setSuccess] = useState(false);
+  const [error, setError] = useState(false);
   const realPin = 1234;
   const keypadLockTime = 5000;
 
@@ -39,12 +40,13 @@ function Keypad() {
   }
 
   const blockKeyboard = () => {
-    console.log('Keypad blocked for ' + keypadLockTime / 1000 + 'seconds');
+    console.log('Keypad blocked for ' + keypadLockTime / 1000 + ' seconds');
     setBlockedKeypad(true);
 
     setTimeout(() => {
       console.log('Keypad unblocked');
       setBlockedKeypad(false);
+      setError(false);
       setWrongAttempts(0);
     }, keypadLockTime);
   }
@@ -52,6 +54,10 @@ function Keypad() {
   const handleButtonClick = (e) => {
     if (blockedKeypad || success) {
       return;
+    }
+
+    if (error) {
+      setError(false);
     }
 
     const newVal = pincode + e.target.innerHTML;
@@ -63,6 +69,8 @@ function Keypad() {
       } else {
         let wrong = wrongAttempts + 1;
         setWrongAttempts(wrong);
+
+        setError(true);
 
         if (wrong === 3) {
           blockKeyboard();
@@ -76,6 +84,18 @@ function Keypad() {
     setPincode(newVal);
   }
 
+  const statusDOM = () => {
+    if(success) {
+      return <div className="success">OK</div>;
+    }
+    if(error && !blockedKeypad) {
+      return <div className="error">ERROR</div>
+    }
+    if(blockedKeypad) {
+      return <div className="error">BLOCKED</div>;
+    }
+  }
+
   const buttonsDOM = buttons.map((button, idx) => {
     return <div className="keypad-button" key={idx} onClick={handleButtonClick}>{button}</div>
   });
@@ -83,16 +103,14 @@ function Keypad() {
   return (
     <div className="container">
       <div className="Keypad">
-        {success &&
-          <div className="success">Logged in!</div>
-        }
+        {statusDOM()}
         <input
           className="keypad-input"
           onChange={handePincodeChange}
           value={maskedPincode}
           disabled>
         </input>
-      {buttonsDOM}
+        {buttonsDOM}
       </div>
     </div>
   );

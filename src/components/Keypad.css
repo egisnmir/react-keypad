@@ -42,3 +42,10 @@
   width: 100%;
   margin-bottom: 10px;
 }
+
+.Keypad .error {
+  color: red;
+  text-align: center;
+  width: 100%;
+  margin-bottom: 10px;
+}
