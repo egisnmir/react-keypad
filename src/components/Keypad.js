@@ -2,13 +2,15 @@ import './Keypad.css';
 import { useState } from 'react';
 
 function Keypad() {
-  const [inputValue, setInputValue] = useState('');
-  const [wrongAttempts, setWrongAttempts] = 0;
-  const [blockedKeypad, setBlockedKeypad] = false;
+  const [pincode, setPincode] = useState('');
+  const [wrongAttempts, setWrongAttempts] = useState(0);
+  const [blockedKeypad, setBlockedKeypad] = useState(false);
   const buttons = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
-  const pinCode = 1234;
+  const [success, setSuccess] = useState(false);
+  const realPin = 1234;
+  const keypadLockTime = 5000;
 
-  const maskedValue = maskNumber(inputValue);
+  const maskedPincode = maskNumber(pincode);
 
   function maskNumber(number) {
     if (number.length <= 1) {
@@ -17,53 +19,78 @@ function Keypad() {
 
     let numString = String(number).split('');
 
-    let maskedNumber = numString.map((digit, idx) => {
-      if(numString.length === idx + 1) {
+    let maskedNum = numString.map((digit, idx) => {
+      if (numString.length === idx + 1) {
         return digit;
       }
       return '*';
     });
 
-    console.log(maskedNumber);
-
-    maskedNumber = maskedNumber.join('');
-
-    return maskedNumber;
+    return maskedNum.join('');
   }
 
-  console.log('Masked value ' + maskedValue);
-  console.log('Real value: ' + inputValue);
+  const handePincodeChange = (e) => {
+    if (blockedKeypad) {
+      return;
+    }
 
-  const handeInputChange = (e) => {
-    setInputValue(e.target.value);
+    setPincode(e.target.value);
+  }
+
+  const blockKeyboard = () => {
+    console.log('Keypad blocked for ' + keypadLockTime / 1000 + 'seconds');
+    setBlockedKeypad(true);
+
+    setTimeout(() => {
+      console.log('Keypad unblocked');
+      setBlockedKeypad(false);
+      setWrongAttempts(0);
+    }, keypadLockTime);
   }
 
   const handleButtonClick = (e) => {
-    const buttonVal = e.target.innerHTML;
+    if (blockedKeypad) {
+      return;
+    }
 
-    setInputValue(String(inputValue) + buttonVal);
+    const newVal = pincode + e.target.innerHTML;
+
+    if (newVal.length === 4) {
+      if (newVal == realPin) {
+        setWrongAttempts(0);
+        setSuccess(true);
+      } else {
+        let wrong = wrongAttempts + 1;
+        setWrongAttempts(wrong);
+
+        if (wrong === 3) {
+          blockKeyboard();
+        }
+      }
+
+      setPincode('');
+      return;
+    }
+    
+    setPincode(newVal);
   }
 
-  const handleSubmitPin = (e) => {
-    console.log(e);
-    console.log('test');
-  }
-
-  const buttonsDOM = buttons.map((button) => {
-    return <div className="keypad-button" onClick={handleButtonClick}>{button}</div>
+  const buttonsDOM = buttons.map((button, idx) => {
+    return <div className="keypad-button" key={idx} onClick={handleButtonClick}>{button}</div>
   });
 
   return (
     <div className="container">
       <div className="Keypad">
+        {success &&
+          <div className="success">Logged in!</div>
+        }
         <input
           className="keypad-value"
-          onChange={handeInputChange}
-          value={maskedValue}>
+          onChange={handePincodeChange}
+          value={maskedPincode}>
         </input>
         {buttonsDOM}
-        <button className="submit"
-        onClick={handleSubmitPin}>Submit</button>
       </div>
     </div>
   );
