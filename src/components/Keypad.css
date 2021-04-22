@@ -1,0 +1,35 @@
+.container {
+  display: flex;
+  width: 250px;
+  height: 280px;
+  padding: 20px;
+  border: 1px solid #e3e3e3;
+  background: #e3e3e3;
+  border-radius: 10px;
+  margin: 20px;
+  box-sizing: border-box;
+}
+
+.Keypad {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.Keypad .keypad-value {
+  margin: 0 auto;
+}
+
+.Keypad .keypad-button:last-child {
+  margin: 0 auto;
+}
+
+.Keypad .keypad-button {
+  width: 16%;
+  padding: 6%;
+  border: 1px solid #858585;
+  background: #ffffff;
+  border-radius: 10px;
+  margin: 5px 0;
+  cursor: pointer;
+}
