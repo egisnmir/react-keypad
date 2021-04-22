@@ -5,7 +5,7 @@ function Keypad() {
   const [pincode, setPincode] = useState('');
   const [wrongAttempts, setWrongAttempts] = useState(0);
   const [blockedKeypad, setBlockedKeypad] = useState(false);
-  const buttons = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
+  const buttons = [7, 8, 9, 4, 5, 6, 1, 2, 3, 0];
   const [success, setSuccess] = useState(false);
   const realPin = 1234;
   const keypadLockTime = 5000;
@@ -31,6 +31,7 @@ function Keypad() {
 
   const handePincodeChange = (e) => {
     if (blockedKeypad) {
+      console.log('Keypad is temporarily');
       return;
     }
 
@@ -49,7 +50,7 @@ function Keypad() {
   }
 
   const handleButtonClick = (e) => {
-    if (blockedKeypad) {
+    if (blockedKeypad || success) {
       return;
     }
 
@@ -71,7 +72,7 @@ function Keypad() {
       setPincode('');
       return;
     }
-    
+
     setPincode(newVal);
   }
 
@@ -86,11 +87,12 @@ function Keypad() {
           <div className="success">Logged in!</div>
         }
         <input
-          className="keypad-value"
+          className="keypad-input"
           onChange={handePincodeChange}
-          value={maskedPincode}>
+          value={maskedPincode}
+          disabled>
         </input>
-        {buttonsDOM}
+      {buttonsDOM}
       </div>
     </div>
   );
