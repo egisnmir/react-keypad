@@ -22,6 +22,7 @@
   height: 30px;
   font-size: 18px;
   background: white;
+  text-align: center;
 }
 
 .Keypad .keypad-button:last-child {
