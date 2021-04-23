@@ -1,5 +1,6 @@
 import './Keypad.css';
 import { useState } from 'react';
+import { maskNumber } from '../utils/utils';
 
 function Keypad() {
   const [pincode, setPin] = useState('');
@@ -13,23 +14,6 @@ function Keypad() {
   const LOCK_TIME = 5000;
 
   const maskedPin = maskNumber(pincode);
-
-  function maskNumber(number) {
-    if (number.length <= 1) {
-      return number;
-    }
-
-    let numString = String(number).split('');
-
-    let maskedNum = numString.map((digit, idx) => {
-      if (numString.length === idx + 1) {
-        return digit;
-      }
-      return '*';
-    });
-
-    return maskedNum.join('');
-  }
 
   function validatePincode(pin) {
     console.log(pin);
@@ -87,7 +71,6 @@ function Keypad() {
     const newPinVal = pincode + e.target.innerHTML;
 
     if (!validatePincode(newPinVal)) {
-      //TODO: Maybe change validatePincode to return true/false
       setPin(newPinVal);
     };
   }
