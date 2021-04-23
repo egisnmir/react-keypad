@@ -2,16 +2,17 @@ import './Keypad.css';
 import { useState } from 'react';
 
 function Keypad() {
-  const [pincode, setPincode] = useState('');
+  const [pincode, setPin] = useState('');
   const [wrongAttempts, setWrongAttempts] = useState(0);
-  const [blockedKeypad, setBlockedKeypad] = useState(false);
-  const buttons = [7, 8, 9, 4, 5, 6, 1, 2, 3, 0];
+  const [blocked, setBlocked] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
-  const realPin = 1234;
-  const keypadLockTime = 5000;
 
-  const maskedPincode = maskNumber(pincode);
+  const BUTTONS = [7, 8, 9, 4, 5, 6, 1, 2, 3, 0];
+  const CORRECT_PIN = 1234;
+  const LOCK_TIME = 5000;
+
+  const maskedPin = maskNumber(pincode);
 
   function maskNumber(number) {
     if (number.length <= 1) {
@@ -30,46 +31,17 @@ function Keypad() {
     return maskedNum.join('');
   }
 
-  const handePincodeChange = (e) => {
-    if (blockedKeypad) {
-      console.log('Keypad is temporarily');
-      return;
-    }
+  function validatePincode(pin) {
+    console.log(pin);
 
-    setPincode(e.target.value);
-  }
-
-  const blockKeyboard = () => {
-    console.log('Keypad blocked for ' + keypadLockTime / 1000 + ' seconds');
-    setBlockedKeypad(true);
-
-    setTimeout(() => {
-      console.log('Keypad unblocked');
-      setBlockedKeypad(false);
-      setError(false);
-      setWrongAttempts(0);
-    }, keypadLockTime);
-  }
-
-  const handleButtonClick = (e) => {
-    if (blockedKeypad || success) {
-      return;
-    }
-
-    if (error) {
-      setError(false);
-    }
-
-    const newVal = pincode + e.target.innerHTML;
-
-    if (newVal.length === 4) {
-      if (newVal == realPin) {
+    if (pin.length === 4) {
+      if (pin === CORRECT_PIN) {
         setWrongAttempts(0);
         setSuccess(true);
       } else {
         let wrong = wrongAttempts + 1;
-        setWrongAttempts(wrong);
 
+        setWrongAttempts(wrong);
         setError(true);
 
         if (wrong === 3) {
@@ -77,26 +49,62 @@ function Keypad() {
         }
       }
 
-      setPincode('');
+      setPin('');
+      return true;
+    }
+  }
+
+  const handePinChange = (e) => {
+    if (blocked) {
+      console.log('Keypad is temporarily blocked');
       return;
     }
 
-    setPincode(newVal);
+    setPin(e.target.value);
+  }
+
+  const blockKeyboard = () => {
+    console.log('Keypad blocked for ' + LOCK_TIME / 1000 + ' seconds');
+    setBlocked(true);
+
+    setTimeout(() => {
+      console.log('Keypad unblocked');
+      setBlocked(false);
+      setError(false);
+      setWrongAttempts(0);
+    }, LOCK_TIME);
+  }
+
+  const handleButtonClick = (e) => {
+    if (blocked || success) {
+      return;
+    }
+
+    if (error) {
+      setError(false);
+    }
+
+    const newPinVal = pincode + e.target.innerHTML;
+
+    if (!validatePincode(newPinVal)) {
+      //TODO: Maybe change validatePincode to return true/false
+      setPin(newPinVal);
+    };
   }
 
   const statusDOM = () => {
-    if(success) {
+    if (success) {
       return <div className="success">OK</div>;
     }
-    if(error && !blockedKeypad) {
+    if (error && !blocked) {
       return <div className="error">ERROR</div>
     }
-    if(blockedKeypad) {
+    if (blocked) {
       return <div className="error">BLOCKED</div>;
     }
   }
 
-  const buttonsDOM = buttons.map((button, idx) => {
+  const buttonsDOM = BUTTONS.map((button, idx) => {
     return <div className="keypad-button" key={idx} onClick={handleButtonClick}>{button}</div>
   });
 
@@ -106,8 +114,8 @@ function Keypad() {
         {statusDOM()}
         <input
           className="keypad-input"
-          onChange={handePincodeChange}
-          value={maskedPincode}
+          onChange={handePinChange}
+          value={maskedPin}
           disabled>
         </input>
         {buttonsDOM}
