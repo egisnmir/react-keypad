@@ -11,5 +11,5 @@ The correct pin is hardcoded in Keypad.js CORRECT_PIN
 
 # To do
 
-Add a pin code setter component and pass it down
-with props/Redux/Context or useContext + useReducer
+1. Add settings and pass it down with props/Redux/Context or useContext + useReducer
+2. Add a 'settings' icon and add the possibility to change the correct pin, block & timeout time
