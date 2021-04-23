@@ -2,7 +2,6 @@ import { render, fireEvent, screen } from '@testing-library/react'
 import { waitFor } from '@testing-library/dom'
 import App from './App';
 
-
 describe('Keypad component', () => {
   beforeEach(() => {
     render(<App />);

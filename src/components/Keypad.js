@@ -75,13 +75,13 @@ function Keypad() {
 
   const statusDOM = () => {
     if (success) {
-      return <div className="success" data-testid="success">OK</div>;
+      return <div className="success" data-testid="success">Success</div>;
     }
     if (error && !blocked) {
-      return <div className="error" data-testid="error">ERROR</div>
+      return <div className="error" data-testid="error">Error</div>
     }
     if (blocked) {
-      return <div className="error" data-testid="blocked">BLOCKED</div>;
+      return <div className="error" data-testid="blocked">Blocked</div>;
     }
   }
 
