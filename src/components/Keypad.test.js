@@ -1,91 +1,86 @@
 import { render, fireEvent, screen } from '@testing-library/react'
-import { waitFor } from '@testing-library/dom'
+import { waitFor, getByTestId } from '@testing-library/dom'
 import Keypad from './Keypad'
 
-describe('Keypad component tests', () => {
-  beforeEach(() => {
-    render(<Keypad />);
-  });
+beforeEach(() => {
+  render(<Keypad />);
+});
 
-  it('checks if a single pincode button works', () => {
-    const inputEle = screen.getByTestId('keypad-input')
-    const button1Ele = screen.getByTestId('button-1')
+test('checks if a single pincode button works', async () => {
+  const inputEle = screen.getByTestId('keypad-input')
+  const button1Ele = screen.getByTestId('button-1')
 
-    fireEvent.click(button1Ele)
+  fireEvent.click(button1Ele)
 
-    expect(inputEle.value).toBe('1')
-  });
+  await expect(inputEle.value).toBe('1')
+});
 
-  it('checks if value masking works', () => {
-    const inputEle = screen.getByTestId('keypad-input')
-    const button1Ele = screen.getByTestId('button-1')
-    const button3Ele = screen.getByTestId('button-3')
-    const button5Ele = screen.getByTestId('button-5')
+test('checks if value masking works', async () => {
+  const inputEle = screen.getByTestId('keypad-input')
+  const button1Ele = screen.getByTestId('button-1')
+  const button3Ele = screen.getByTestId('button-3')
+  const button5Ele = screen.getByTestId('button-5')
 
-    fireEvent.click(button1Ele)
-    fireEvent.click(button3Ele)
-    fireEvent.click(button5Ele)
+  fireEvent.click(button1Ele)
+  fireEvent.click(button3Ele)
+  fireEvent.click(button5Ele)
 
-    expect(inputEle.value).toBe('**5')
-  });
-  
-  it('checks if entering the correct pin works', async () => {
-    const button1Ele = screen.getByTestId('button-1')
-    const button2Ele = screen.getByTestId('button-2')
-    const button3Ele = screen.getByTestId('button-3')
-    const button4Ele = screen.getByTestId('button-4')
+  await expect(inputEle.value).toBe('**5')
+});
 
-    fireEvent.click(button1Ele)
-    fireEvent.click(button2Ele)
-    fireEvent.click(button3Ele)
-    fireEvent.click(button4Ele)
+test('checks if entering the correct pin works', async () => {
+  const button1Ele = screen.getByTestId('button-1')
+  const button2Ele = screen.getByTestId('button-2')
+  const button3Ele = screen.getByTestId('button-3')
+  const button4Ele = screen.getByTestId('button-4')
 
-    const successEle = await waitFor(() => screen.getByTestId('success'), {
-      timeout: 1000
-    });
-    expect(successEle).toBeInTheDocument()
-  });
+  fireEvent.click(button1Ele)
+  fireEvent.click(button2Ele)
+  fireEvent.click(button3Ele)
+  fireEvent.click(button4Ele)
 
-  it('check if entering the wrong value shows an error message', async () => {
-    const button1Ele = screen.getByTestId('button-1')
+  await waitFor(() => {
+    expect(screen.getByTestId('success')).toBeInTheDocument()
+  })
+});
 
-    function clickTimes(times, ele) {
-      for(let i = 1; i <= times; i++) {
-        fireEvent.click(ele)
-      }
+test('check if entering the wrong value shows an error message', async () => {
+  const button1Ele = screen.getByTestId('button-1')
+
+  function clickTimes(times, ele) {
+    for (let i = 1; i <= times; i++) {
+      fireEvent.click(ele)
     }
+  }
 
-    //A wrong attempt
-    clickTimes(4, button1Ele)
+  //A wrong attempt
+  clickTimes(4, button1Ele)
 
-    const errorEle = await waitFor(() => screen.getByTestId('error'), {
-      timeout: 1000
-    });
-    expect(errorEle).toBeInTheDocument()
-  });
+  await waitFor(() => {
+    expect(screen.getByTestId('error')).toBeInTheDocument()
+  })  
+});
 
-  it('check if entering the wrong value 3 times blocks the input', async () => {
-    const inputEle = screen.getByTestId('keypad-input')
-    const button1Ele = screen.getByTestId('button-1')
+test('check if entering the wrong value 3 times blocks the input', async () => {
+  const inputEle = screen.getByTestId('keypad-input')
+  const button1Ele = screen.getByTestId('button-1')
 
-    function clickTimes(times, ele) {
-      for(let i = 1; i <= times; i++) {
-        fireEvent.click(ele)
-      }
+  function clickTimes(times, ele) {
+    for (let i = 1; i <= times; i++) {
+      fireEvent.click(ele)
     }
+  }
 
-    //Three wrong attempts
-    clickTimes(12, button1Ele)
+  //Three wrong attempts
+  clickTimes(12, button1Ele)
 
-    const blockedEle = await waitFor(() => screen.getByTestId('blocked'), {
-      timeout: 1000
-    });
-    expect(blockedEle).toBeInTheDocument()
+  await waitFor(() => {
+    expect(screen.getByTestId('blocked')).toBeInTheDocument()
+  })  
 
-    //Fourth wrong attempt
-    fireEvent.click(button1Ele)
-    fireEvent.click(button1Ele)
+  //Fourth wrong attempt
+  fireEvent.click(button1Ele)
+  fireEvent.click(button1Ele)
 
-    expect(inputEle.value).toBe('')
-  });
-})
+  expect(inputEle.value).toBe('')
+});
