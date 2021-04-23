@@ -16,8 +16,9 @@ function Keypad() {
   const maskedPin = maskNumber(pincode);
 
   function validatePin(pin) {
+    pin = Number(pin);
     if (pin.length === 4) {
-      if (pin == CORRECT_PIN) {
+      if (pin === CORRECT_PIN) {
         setWrongAttempts(0);
         setSuccess(true);
       } else {
