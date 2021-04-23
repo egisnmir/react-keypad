@@ -94,7 +94,6 @@ function Keypad() {
     >{button}</div>
   });
 
-
   return (
     <div className="container">
       <div className="Keypad">
