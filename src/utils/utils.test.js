@@ -3,11 +3,8 @@ import { maskNumber } from './utils'
 //TODO
 describe('Keypad component tests', () => {
   it('tests if the maskNumber function works correctly', () => {
-    const unmaskedValue = 1234;
-    let maskedValue;
+    const maskedValue = maskNumber(1243);
 
-    maskedValue = maskNumber(unmaskedValue);
-    
     expect(maskedValue).toBe('***4');
   });
 });
