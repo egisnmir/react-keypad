@@ -39,14 +39,16 @@
 }
 
 .Keypad .success {
-  color: green;
+  color: #0F766E;
+  font-size: 22px;
   text-align: center;
   width: 100%;
   margin-bottom: 10px;
 }
 
-.Keypad .error {
-  color: red;
+.Keypad .error, .Keypad .blocked {
+  color: #DC2626;
+  font-size: 22px;
   text-align: center;
   width: 100%;
   margin-bottom: 10px;
