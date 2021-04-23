@@ -6,16 +6,16 @@ beforeEach(() => {
   render(<Keypad />);
 });
 
-test('checks if a single pincode button works', async () => {
+test('checks if a single pincode button works', () => {
   const inputEle = screen.getByTestId('keypad-input')
   const button1Ele = screen.getByTestId('button-1')
 
   fireEvent.click(button1Ele)
 
-  await expect(inputEle.value).toBe('1')
+  expect(inputEle.value).toBe('1')
 });
 
-test('checks if value masking works', async () => {
+test('checks if value masking works', () => {
   const inputEle = screen.getByTestId('keypad-input')
   const button1Ele = screen.getByTestId('button-1')
   const button3Ele = screen.getByTestId('button-3')
@@ -25,7 +25,7 @@ test('checks if value masking works', async () => {
   fireEvent.click(button3Ele)
   fireEvent.click(button5Ele)
 
-  await expect(inputEle.value).toBe('**5')
+  expect(inputEle.value).toBe('**5')
 });
 
 test('checks if entering the correct pin works', async () => {
