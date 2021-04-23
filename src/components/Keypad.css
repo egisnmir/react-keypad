@@ -39,6 +39,11 @@
   cursor: pointer;
 }
 
+.Keypad .keypad-button:hover {
+  background: #a4ddd8;
+  border: 1px solid #a4ddd8;
+}
+
 .Keypad .success {
   color: #0F766E;
   font-size: 22px;
