@@ -6,8 +6,10 @@
 
 # Description
 
-The correct pin is hardcoded in Keypad.js
+The correct pin is hardcoded in Keypad.js CORRECT_PIN
 
-There is some debug info which can be seen in the console
 
-I've set the pinpad lock time to 5 seconds in Keypad.js
+# To do
+
+Add a pin code setter component and pass it down
+with props/Redux/Context or useContext + useReducer

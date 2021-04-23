@@ -1,10 +1,10 @@
 import { render, fireEvent, screen } from '@testing-library/react'
 import { waitFor } from '@testing-library/dom'
-import App from './App';
+import Keypad from './Keypad'
 
-describe('Keypad component', () => {
+describe('Keypad component tests', () => {
   beforeEach(() => {
-    render(<App />);
+    render(<Keypad />);
   });
 
   it('checks if a single pincode button works', () => {
