@@ -17,7 +17,7 @@ function Keypad() {
 
   function validatePin(pin) {
     if (pin.length === 4) {
-      if (pin === CORRECT_PIN) {
+      if (pin == CORRECT_PIN) {
         setWrongAttempts(0);
         setSuccess(true);
       } else {
@@ -75,13 +75,13 @@ function Keypad() {
 
   const statusDOM = () => {
     if (success) {
-      return <div className="success">OK</div>;
+      return <div className="success" data-testid="success">OK</div>;
     }
     if (error && !blocked) {
-      return <div className="error">ERROR</div>
+      return <div className="error" data-testid="error">ERROR</div>
     }
     if (blocked) {
-      return <div className="error">BLOCKED</div>;
+      return <div className="error" data-testid="blocked">BLOCKED</div>;
     }
   }
 
@@ -90,8 +90,10 @@ function Keypad() {
       className="keypad-button"
       key={idx}
       onClick={handleButtonClick}
+      data-testid={"button-" + button}
     >{button}</div>
   });
+
 
   return (
     <div className="container">
@@ -101,6 +103,7 @@ function Keypad() {
           className="keypad-input"
           onChange={handePinChange}
           value={maskedPin}
+          data-testid="keypad-input"
           disabled>
         </input>
         {buttonsDOM}
