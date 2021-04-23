@@ -86,7 +86,11 @@ function Keypad() {
   }
 
   const buttonsDOM = BUTTONS.map((button, idx) => {
-    return <div className="keypad-button" key={idx} onClick={handleButtonClick}>{button}</div>
+    return <div
+      className="keypad-button"
+      key={idx}
+      onClick={handleButtonClick}
+    >{button}</div>
   });
 
   return (
