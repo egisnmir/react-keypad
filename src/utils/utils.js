@@ -14,3 +14,7 @@ export const maskNumber = (number) => {
 
   return maskedNum.join('');
 }
+
+export const validatePin = (pin, correctPin) => {
+  
+}

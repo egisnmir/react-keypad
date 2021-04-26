@@ -16,24 +16,27 @@ function Keypad() {
   const maskedPin = maskNumber(pincode);
 
   function validatePin(pin) {
-    if (pin.length === 4) {
-      if (pin == CORRECT_PIN) {
-        setWrongAttempts(0);
-        setSuccess(true);
-      } else {
-        let wrong = wrongAttempts + 1;
+    if (pin.length !== 4)
+      return;
 
-        setWrongAttempts(wrong);
-        setError(true);
-
-        if (wrong === 3) {
-          blockKeyboard();
-        }
-      }
-
+    if (pin == CORRECT_PIN) {
+      setWrongAttempts(0);
+      setSuccess(true);
       setPin('');
       return true;
     }
+
+    let wrong = wrongAttempts + 1;
+
+    setWrongAttempts(wrong);
+    setError(true);
+
+    if (wrong === 3) {
+      blockKeyboard();
+    }
+
+    setPin('');
+    return true;
   }
 
   const handePinChange = (e) => {
@@ -66,23 +69,22 @@ function Keypad() {
       setError(false);
     }
 
-    const newPinVal = pincode + e.target.innerHTML;
+    const newPin = pincode + e.target.innerHTML;
 
-    if (!validatePin(newPinVal)) {
-      setPin(newPinVal);
+    if (!validatePin(newPin)) {
+      setPin(newPin);
     };
   }
 
   const statusDOM = () => {
-    if (success) {
-      return <div className="success" data-testid="success">Success</div>;
-    }
-    if (error && !blocked) {
+    if (success)
+      return <div className="success" data-testid="success">Success</div>
+
+    if (error && !blocked)
       return <div className="error" data-testid="error">Error</div>
-    }
-    if (blocked) {
-      return <div className="error" data-testid="blocked">Blocked</div>;
-    }
+      
+    if (blocked)
+      return <div className="error" data-testid="blocked">Blocked</div>
   }
 
   const buttonsDOM = BUTTONS.map((button, idx) => {
