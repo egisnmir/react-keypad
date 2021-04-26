@@ -1,5 +1,5 @@
 import { render, fireEvent, screen } from '@testing-library/react'
-import { waitFor, getByTestId } from '@testing-library/dom'
+import { waitFor } from '@testing-library/dom'
 import Keypad from './Keypad'
 
 beforeEach(() => {
