@@ -1,9 +1,9 @@
 # Running the app
 
-1. npm install
-2. npm start
+1. yarn install
+2. yarn start
 
-Run tests with 'npm test'
+Run tests with 'yarn test'
 
 
 # Description
